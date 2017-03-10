@@ -63,7 +63,7 @@ Now that the config is set up you can begin to make API requests.
 Some examples below:
 
 ```bash
-# Getting all companies
+# Get all company codes
 nuorder get /api/companies/codes/list
 
 # Creating an order
