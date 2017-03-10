@@ -15,7 +15,7 @@ Make requests to NuOrder's wholesale API
 
 ## 1. Install
 
-Python 2 is not supported. Only tested with Python 3.5, so make sure it's installed with the right version.
+Python 3+ should be supported, but only Python 3.5 has actually been tested. So please ensure that you're on the right platform.
 
 ```bash
 $ pip install nuorder
