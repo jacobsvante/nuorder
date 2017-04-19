@@ -21,6 +21,7 @@ default and can be overridden by passing in `-c <name>`.
 Useful when one wants to make calls to both sandbox and production
 environments."""
 import functools
+import gzip
 import hashlib
 import hmac
 import json
@@ -64,7 +65,8 @@ def request(
     config_section: 'The name of the config section to get settings from.' = 'sandbox',
     nonce: 'The nonce to use. Defaults to 16 random alphanumericals.' = None,
     timestamp: 'The timestamp to use. Defaults to local now.' = None,
-    dry_run: "Don't actually run command if True" = False
+    dry_run: "Don't actually run command if True" = False,
+    gzip_data: "Gzip data sent to NuOrder" = False
 ):
     c = functools.partial(config.get, config_section)
 
@@ -81,7 +83,9 @@ def request(
     app_name = app_name or c('app_name', required=is_initiate_url)
 
     if data == '-':
-        data = ''.join(sys.stdin)
+        data = sys.stdin.buffer.read()
+    elif data is not None:
+        data = data.encode('utf-8')
 
     url = 'https://{}{}'.format(hostname, endpoint)
     base_string_tmpl = '{method}{url}?oauth_consumer_key={consumer_key}&oauth_token={oauth_token}&oauth_timestamp={timestamp}&oauth_nonce={nonce}&oauth_version=1.0&oauth_signature_method=HMAC-SHA1'
@@ -135,6 +139,10 @@ def request(
         'Authorization': authorization_header,
         'Content-Type': 'application/json',
     }
+
+    if gzip_data:
+        headers['Content-Encoding'] = 'gzip'
+        data = gzip.compress(data)
 
     logger.debug(headers)
     if dry_run:

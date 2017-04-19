@@ -24,9 +24,9 @@ setup_kwargs = dict(
     ],
     extras_require={
         'test': {
-            'coverage>=4.2',
-            'flake8>=3.0.4',
-            'pytest>=3.0.3',
+            'coverage>=4.3.4',
+            'flake8>=3.3.0',
+            'pytest>=3.0.7',
             'responses>=0.5.1',
         },
     },

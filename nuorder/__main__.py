@@ -148,7 +148,8 @@ def post(
     data: 'The data to send along with POST/PUT. If `-` then read from stdin.' = None,
     config_section: 'The name of the config section to get settings from.' = 'sandbox',
     log_level: 'The log level to use.' = 'WARNING',
-    dry_run: "Don't actually run command, just show what would be run." = False
+    dry_run: "Don't actually run command, just show what would be run." = False,
+    gzip_data: "Gzip data to NuOrder" = False
 ):
     """Make a PUT request to NuOrder"""
     _set_log_level(log_level)
@@ -163,6 +164,7 @@ def post(
         data=data,
         config_section=config_section,
         dry_run=dry_run,
+        gzip_data=gzip_data,
     )
     return json.dumps(resp_json, indent=2)
 
@@ -179,7 +181,8 @@ def put(
     data: 'The data to send along with POST/PUT. If `-` then read from stdin.' = None,
     config_section: 'The name of the config section to get settings from.' = 'sandbox',
     log_level: 'The log level to use.' = 'WARNING',
-    dry_run: "Don't actually run command, just show what would be run." = False
+    dry_run: "Don't actually run command, just show what would be run." = False,
+    gzip_data: "Gzip data to NuOrder" = False
 ):
     """Make a PUT request to NuOrder"""
     _set_log_level(log_level)
@@ -194,6 +197,7 @@ def put(
         data=data,
         config_section=config_section,
         dry_run=dry_run,
+        gzip_data=gzip_data,
     )
     return json.dumps(resp_json, indent=2)
 
