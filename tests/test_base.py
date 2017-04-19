@@ -16,7 +16,7 @@ def test_entry_point_runnable(cmd):
     assert b'usage: ' in proc.stdout
 
 
-def test_get_request():
+def test_get_request(default_request_kw):
     with responses.RequestsMock(assert_all_requests_are_fired=True) as rsps:
         rsps.add(
             responses.GET,
@@ -26,12 +26,12 @@ def test_get_request():
         data = nuorder.request(
             method='GET',
             endpoint='/api/products/season/fw17/list',
-            hostname='wholesale.sandbox1.nuorder.com',
+            **default_request_kw
         )
         assert data == ["product1"]
 
 
-def test_post_request():
+def test_post_request(default_request_kw):
     def request_callback(request):
         return (201, {}, request.body)
 
@@ -45,13 +45,13 @@ def test_post_request():
         data = nuorder.request(
             method='POST',
             endpoint='/api/product/product2',
-            hostname='wholesale.sandbox1.nuorder.com',
-            data='{"name": "My product", "style_number": "12345"}'
+            data='{"name": "My product", "style_number": "12345"}',
+            **default_request_kw
         )
         assert data == {"name": "My product", "style_number": "12345"}
 
 
-def test_post_request_gzipped():
+def test_post_request_gzipped(default_request_kw):
     def request_callback(request):
         return (201, {}, gzip.decompress(request.body))
 
@@ -65,8 +65,8 @@ def test_post_request_gzipped():
         kwargs = dict(
             method='POST',
             endpoint='/api/product/product3',
-            hostname='wholesale.sandbox1.nuorder.com',
             data='{"name": "L33T product", "style_number": "1337"}',
+            **default_request_kw
         )
         data = nuorder.request(**kwargs, gzip_data=True)
         assert data == {"name": "L33T product", "style_number": "1337"}
