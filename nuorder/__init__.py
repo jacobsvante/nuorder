@@ -29,7 +29,7 @@ class NuOrder:
         oauth_token,
         oauth_token_secret,
         *,
-        requests_session=None,
+        requests_session=None
     ):
         self.hostname = hostname
         self.consumer_key = consumer_key
@@ -65,7 +65,7 @@ class NuOrder:
         timestamp,
         nonce,
         *,
-        additional_args=None,
+        additional_args=None
     ):
         oauth_args = self._get_oauth_args(
             timestamp,
@@ -81,7 +81,7 @@ class NuOrder:
         timestamp,
         nonce,
         *,
-        additional_args=None,
+        additional_args=None
     ):
         oauth_args = self._get_oauth_args(
             timestamp,
@@ -105,7 +105,7 @@ class NuOrder:
         dry_run=None,
         gzip_data=False,
         _additional_oauth_base_string_args=None,
-        _additional_oauth_header_args=None,
+        _additional_oauth_header_args=None
     ):
         method = method.upper()
         url = 'https://{}{}'.format(self.hostname, endpoint)
