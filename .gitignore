@@ -1,9 +1,10 @@
 *.egg-info
 *.pyc
 *.sublime-*
-.cache
-.coverage
-.tox
-build/
-dist/
-venv/
+/.cache
+/.coverage
+/.tox
+/.pytest_cache
+/build/
+/dist/
+/venv/
