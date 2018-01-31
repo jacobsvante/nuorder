@@ -4,7 +4,7 @@ import subprocess
 import pytest
 import responses
 
-import nuorder
+from nuorder import NuOrder
 
 
 @pytest.mark.parametrize('cmd', [
@@ -16,22 +16,21 @@ def test_entry_point_runnable(cmd):
     assert b'usage: ' in proc.stdout
 
 
-def test_get_request(default_request_kw):
+def test_get_request(default_nuorder_kw):
+    nu = NuOrder(**default_nuorder_kw)
     with responses.RequestsMock(assert_all_requests_are_fired=True) as rsps:
         rsps.add(
             responses.GET,
             'https://wholesale.sandbox1.nuorder.com/api/products/season/fw17/list',
             body='["product1"]',
         )
-        data = nuorder.request(
-            method='GET',
-            endpoint='/api/products/season/fw17/list',
-            **default_request_kw
-        )
+        data = nu.get('/api/products/season/fw17/list')
         assert data == ["product1"]
 
 
-def test_post_request(default_request_kw):
+def test_post_request(default_nuorder_kw):
+    nu = NuOrder(**default_nuorder_kw)
+
     def request_callback(request):
         return (201, {}, request.body)
 
@@ -42,16 +41,16 @@ def test_post_request(default_request_kw):
             callback=request_callback,
             content_type='application/json',
         )
-        data = nuorder.request(
-            method='POST',
-            endpoint='/api/product/product2',
-            data='{"name": "My product", "style_number": "12345"}',
-            **default_request_kw
+        data = nu.post(
+            '/api/product/product2',
+            {'name': 'My product', 'style_number': '12345'},
         )
-        assert data == {"name": "My product", "style_number": "12345"}
+        assert data == {'name': 'My product', 'style_number': '12345'}
 
 
-def test_post_request_gzipped(default_request_kw):
+def test_post_request_gzipped(default_nuorder_kw):
+    nu = NuOrder(**default_nuorder_kw)
+
     def request_callback(request):
         return (201, {}, gzip.decompress(request.body))
 
@@ -62,15 +61,9 @@ def test_post_request_gzipped(default_request_kw):
             callback=request_callback,
             content_type='application/json',
         )
-        kwargs = dict(
-            method='POST',
-            endpoint='/api/product/product3',
-            data='{"name": "L33T product", "style_number": "1337"}',
-            **default_request_kw
-        )
-        data = nuorder.request(**kwargs, gzip_data=True)
+        args = [
+            '/api/product/product3',
+            '{"name": "L33T product", "style_number": "1337"}',
+        ]
+        data = nu.post(*args, gzip_data=True)
         assert data == {"name": "L33T product", "style_number": "1337"}
-
-        with pytest.raises(OSError) as exception_info:
-            data = nuorder.request(**kwargs)
-        assert 'Not a gzipped file' in str(exception_info.value)

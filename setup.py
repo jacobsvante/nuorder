@@ -1,15 +1,9 @@
 from setuptools import setup
 
-# Get package metadata. To avoid loading the package __init__ we
-# use exec instead.
-with open('nuorder/_metadata.py') as fh:
-    metadata = {}
-    exec(fh.read(), globals(), metadata)
-
 setup_kwargs = dict(
     name='nuorder',
-    version=metadata['__version__'],
-    description="Conveniently make requests to NuOrder's wholesale API",
+    version='1.1.0',
+    description="Package to make requests to NuOrder's wholesale API",
     packages=['nuorder'],
     include_package_data=True,
     author='Jacob Magnusson',
@@ -18,11 +12,14 @@ setup_kwargs = dict(
     license='BSD',
     platforms='any',
     install_requires=[
-        'argh',
         'requests',
-        'termcolor',
     ],
     extras_require={
+        'cli': [
+            'argh',
+            'ipython',
+            'termcolor',
+        ],
         'test': {
             'coverage>=4.3.4',
             'flake8>=3.3.0',
@@ -43,6 +40,7 @@ setup_kwargs = dict(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 )
 

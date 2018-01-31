@@ -2,27 +2,31 @@
 
 [![Travis CI build status (Linux)](https://travis-ci.org/jmagnusson/nuorder.svg?branch=master)](https://travis-ci.org/jmagnusson/nuorder)
 [![PyPI version](https://img.shields.io/pypi/v/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
-[![Downloads from PyPI per month](https://img.shields.io/pypi/dm/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
 [![License](https://img.shields.io/pypi/l/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
 [![Available as wheel](https://img.shields.io/pypi/wheel/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
 [![PyPI status (alpha/beta/stable)](https://img.shields.io/pypi/status/nuorder.svg)](https://pypi.python.org/pypi/nuorder/)
 [![Coverage Status](https://coveralls.io/repos/github/jmagnusson/nuorder/badge.svg?branch=master)](https://coveralls.io/github/jmagnusson/nuorder?branch=master)
-[![Code Health](https://landscape.io/github/jmagnusson/nuorder/master/landscape.svg?style=flat)](https://landscape.io/github/jmagnusson/nuorder/master)
 
 Make requests to NuOrder's wholesale API
 
 
-## 1. Install
+## Install
 
-Python 3+ should be supported, but only Python 3.5 has actually been tested. So please ensure that you're on the right platform.
+Python 3+ should be supported, but only Python 3.5 & 3.6 has actually been tested. So please ensure that you're on the right platform.
 
+For CLI access:
+```bash
+$ pip install nuorder[cli]
+```
+
+For programmatic access only:
 ```bash
 $ pip install nuorder
 ```
 
 
-## 2. Creating the config
+## 2. CLI access
 
 Create a settings file in `~/.config/nuorder.ini`, with data from the API management section. `hostname` is usually `wholesale.sandbox1.nuorder.com` for sandbox and `wholesale.nuorder.com` for production. `app_name` is whatever you want it to be. `sandbox` is the default config section used, but can be overridden in all API calls, with `--config-section` (or `-c`). For more info run `nuorder --help`.
 
@@ -36,7 +40,7 @@ oauth_token = ; Will be created in next step if needed
 oauth_token_secret = ; Will be created in next step if needed
 ```
 
-## 3. Getting OAuth token and secret
+## Getting an OAuth token and secret
 
 ```bash
 $ nuorder initiate
@@ -56,7 +60,7 @@ Success! Final OAuth token and secret to use below. Remember to save them in the
 
 Now you just have to put `oauth_token_secret` and `oauth_token` in the config previously created and you should be good to go.
 
-## 4. Making API calls
+## Making API calls from the CLI
 
 Now that the config is set up you can begin to make API requests.
 
@@ -68,4 +72,23 @@ nuorder get /api/companies/codes/list
 
 # Creating an order
 cat my-order-payload.json | nuorder put /api/order/new --data -
+```
+
+## Making API calls programmatically
+
+Example:
+
+```python
+import nuorder
+NUORDER_CONFIG = {
+    'hostname': 'wholesale.sandbox1.nuorder.com',
+    'consumer_key': 'fake_consumer_key',
+    'consumer_secret': 'fake_consumer_secret',
+    'oauth_token': 'fake_oauth_token',
+    'oauth_token_secret': 'fake_oauth_token_secret',
+}
+nu = nuorder.NuOrder(
+    **NUORDER_CONFIG,
+)
+companies = nu.get('/api/companies/codes/list')
 ```
