@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 (2018-02-04)
+
+* Make the `data` arg optional for POST/PUT requests
+* Previously we returned a "request error" when response from NuOrder couldn't be processed as JSON. Instead of `{"request_error": [response text]}` we're now returning the more descriptive `{"response_status_code": [HTTP status code], "response_text": [response text], "json_decode_error_details": [JSONDecodeError details]}`, or `{}` if there was no response body (which of course would fail to parse as JSON).
+
 ## 1.1.0 (2018-01-31)
 
 * Refactor to use class, for easier repeated access

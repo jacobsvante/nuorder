@@ -176,8 +176,15 @@ class NuOrder:
         logger.info('Returned HTTP status {}'.format(resp.status_code))
         try:
             return resp.json()
-        except json.decoder.JSONDecodeError:
-            return {'request_error': resp.text}
+        except json.decoder.JSONDecodeError as exc:
+            if not resp.text:
+                return {}
+            else:
+                return {
+                    'response_status_code': resp.status_code,
+                    'response_text': resp.text,
+                    'error': str(exc),
+                }
 
     def get(self, endpoint, *, dry_run=False):
         return self._request('GET', endpoint, dry_run=dry_run)
@@ -185,7 +192,7 @@ class NuOrder:
     def delete(self, endpoint, *, dry_run=False):
         return self._request('DELETE', endpoint, dry_run=dry_run)
 
-    def post(self, endpoint, data, *, dry_run=False, gzip_data=False):
+    def post(self, endpoint, data=None, *, dry_run=False, gzip_data=False):
         return self._request(
             'POST',
             endpoint,
@@ -194,7 +201,7 @@ class NuOrder:
             gzip_data=gzip_data,
         )
 
-    def put(self, endpoint, data, *, dry_run=False, gzip_data=False):
+    def put(self, endpoint, data=None, *, dry_run=False, gzip_data=False):
         return self._request(
             'PUT',
             endpoint,

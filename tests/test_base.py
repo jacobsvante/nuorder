@@ -48,6 +48,23 @@ def test_post_request(default_nuorder_kw):
         assert data == {'name': 'My product', 'style_number': '12345'}
 
 
+def test_empty_post_request(default_nuorder_kw):
+    nu = NuOrder(**default_nuorder_kw)
+
+    def request_callback(request):
+        return (201, {}, '{"ok": true}')
+
+    with responses.RequestsMock(assert_all_requests_are_fired=True) as rsps:
+        rsps.add_callback(
+            responses.POST,
+            'https://wholesale.sandbox1.nuorder.com/api/order/123/process',
+            callback=request_callback,
+            content_type='application/json',
+        )
+        data = nu.post('/api/order/123/process')
+        assert data == {'ok': True}
+
+
 def test_post_request_gzipped(default_nuorder_kw):
     nu = NuOrder(**default_nuorder_kw)
 
