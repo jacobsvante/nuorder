@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (2019-01-26)
+
+* Support Python 3.7
+
 ## 1.1.1 (2018-02-04)
 
 * Make the `data` arg optional for POST/PUT requests

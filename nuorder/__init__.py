@@ -91,8 +91,7 @@ class NuOrder:
             ),
         )
         joined_args = ','.join(
-            '='.join((k, v)) for k, v
-            in oauth_args,
+            ('='.join((k, v)) for k, v in oauth_args)
         )
         return 'OAuth {}'.format(joined_args)
 

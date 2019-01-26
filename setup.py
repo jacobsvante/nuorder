@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup_kwargs = dict(
     name='nuorder',
-    version='1.1.1',
+    version='1.1.2',
     description="Package to make requests to NuOrder's wholesale API",
     packages=['nuorder'],
     include_package_data=True,
@@ -41,6 +41,7 @@ setup_kwargs = dict(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )
 
